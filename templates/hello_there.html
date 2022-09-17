@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>WEB SCRAPPING</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body class="container mt-5">
+        <form enctype="multipart/form-data" class="" method="get" action="/scrapping" id="scrapform">
+            <div class="input-group mb-3">
+                <span class="input-group-text">url</span>
+                <input type="text" id="url" name="url" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success float-right mt-5 mb-5" id="submit_btn">Scrapping</button>
+        </form>
+        {% if data %}
+        <form enctype="multipart/form-data" class="float-right mr-5" method="get" action="/csv" id="csvform">
+            <button type="submit" class="btn btn-success mt-5" id="submit_btn">Export CSV</button>
+        </form>
+        {% endif %} 
+        {% if export %}
+        <h4 class="mt-5" style="text-align: center;">{{ export }}</h4>
+        {% endif %}
+        {% if data %}
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Store Name</th>
+                    <th>Store Address</th>
+                    <th>Category</th>
+                    <th>Sub Category</th>
+                    <th>Product Name</th>
+                    <th>Pack Size</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                    {% for product in data %}
+                    <tr>
+                        <td>{{product['No']}}</td>
+                        <td>{{product['Store Name']}}</td>
+                        <td>{{product['Store Address']}}</td>
+                        <td>{{product['Category']}}</td>
+                        <td>{{product['Sub Category']}}</td>
+                        <td>{{product['Product Name']}}</td>
+                        <td>{{product['Pack Size']}}</td>
+                        <td>{{product['Price']}}</td>
+                        <td><img src='{{product['Image']}}' style="width: 200px;"></td>
+                    </tr>
+                    {% endfor %}
+                
+            </tbody>
+        </table>
+        {% endif %}        
+    </body>
+</html>
