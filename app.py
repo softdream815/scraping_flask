@@ -1,8 +1,6 @@
 from flask import render_template
-from flask_mysqldb import MySQL
 from flask_cors import CORS
 from flask import Flask, request
-from flask_jwt_extended import create_access_token, JWTManager
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -13,15 +11,6 @@ import datetime
 
 app = Flask(__name__)
 
-app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
-jwt = JWTManager(app)
-
-mysql = MySQL()
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '12qw!@QW'
-app.config['MYSQL_DB'] = 'Scraping'
-mysql = MySQL(app)
 CORS(app)
 
 #url = 'https://www.ubereats.com/au/store/bws-balaclava/6N4qPwGdXAKyJv_acN3cnA/3c4b6860-e5d8-507b-975b-29319623df37/2082e1f3-d2d0-5ebe-99d6-5de7a380ea07/6d10654b-e9d7-5588-9131-2a4ae1548d1f?diningMode=DELIVERY&ps=1'
