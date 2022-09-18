@@ -114,59 +114,59 @@ def exportcsv():
         data = product
     )
 
-@app.route('/register', methods=['POST'])
-def register():
-    firstName = request.json.get("first_name", None)
-    lastName = request.json.get("last_name", None)
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-    changepassword = request.json.get("password_confirmation", None)
-    access_token = create_access_token(identity=email)
+# @app.route('/register', methods=['POST'])
+# def register():
+#     firstName = request.json.get("first_name", None)
+#     lastName = request.json.get("last_name", None)
+#     email = request.json.get("email", None)
+#     password = request.json.get("password", None)
+#     changepassword = request.json.get("password_confirmation", None)
+#     access_token = create_access_token(identity=email)
 
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM users WHERE email LIKE %s", [email])
-    user = cursor.fetchone()
-    if user:
-        return {"msg": "Wrong email or password"}, 401
+#     cursor = mysql.connection.cursor()
+#     cursor.execute("SELECT * FROM users WHERE email LIKE %s", [email])
+#     user = cursor.fetchone()
+#     if user:
+#         return {"msg": "Wrong email or password"}, 401
 
-    cursor.execute("SELECT Max(id) FROM users")
-    id = cursor.fetchone()
-    cursor.execute(''' INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s)''', (id[0]+1, firstName, lastName, email, password, access_token))
-    mysql.connection.commit()
-    cursor.close()
-    response = {"api_token": access_token}
-    return response
+#     cursor.execute("SELECT Max(id) FROM users")
+#     id = cursor.fetchone()
+#     cursor.execute(''' INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s)''', (id[0]+1, firstName, lastName, email, password, access_token))
+#     mysql.connection.commit()
+#     cursor.close()
+#     response = {"api_token": access_token}
+#     return response
 
-@app.route('/login', methods=['POST'])
-def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
+# @app.route('/login', methods=['POST'])
+# def login():
+#     email = request.json.get("email", None)
+#     password = request.json.get("password", None)
     
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
-    user = cursor.fetchone()
-    if user:
-        access_token = create_access_token(identity=email)
-        cursor = mysql.connection.cursor()
-        cursor.execute("UPDATE users SET token = %s WHERE id = %s", (access_token, user[0]))
-        mysql.connection.commit()
-        cursor.close()
-        response = {"api_token": access_token}
-        return response
-    else:
-        return {"msg": "Wrong email or password"}, 401
+#     cursor = mysql.connection.cursor()
+#     cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+#     user = cursor.fetchone()
+#     if user:
+#         access_token = create_access_token(identity=email)
+#         cursor = mysql.connection.cursor()
+#         cursor.execute("UPDATE users SET token = %s WHERE id = %s", (access_token, user[0]))
+#         mysql.connection.commit()
+#         cursor.close()
+#         response = {"api_token": access_token}
+#         return response
+#     else:
+#         return {"msg": "Wrong email or password"}, 401
 
-@app.route('/verify_token', methods=['POST'])
-def verify():
-    access_token = request.json.get("api_token", None)
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM users WHERE token LIKE %s", [access_token])
-    userinfo = cursor.fetchone()
-    cursor.close()
+# @app.route('/verify_token', methods=['POST'])
+# def verify():
+#     access_token = request.json.get("api_token", None)
+#     cursor = mysql.connection.cursor()
+#     cursor.execute("SELECT * FROM users WHERE token LIKE %s", [access_token])
+#     userinfo = cursor.fetchone()
+#     cursor.close()
 
-    if userinfo:
-        # response = {"api_token": userinfo}
-        response = {"id": userinfo[0], "password":userinfo[4], "email":userinfo[3], "first_name":userinfo[1], "last_name":userinfo[2] }
-        return response
-    else:
-        return {"msg": "Wrong email or password"}, 401
+#     if userinfo:
+#         # response = {"api_token": userinfo}
+#         response = {"id": userinfo[0], "password":userinfo[4], "email":userinfo[3], "first_name":userinfo[1], "last_name":userinfo[2] }
+#         return response
+#     else:
+#         return {"msg": "Wrong email or password"}, 401
